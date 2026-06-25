@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Callable, Optional
+from typing import TYPE_CHECKING, Callable, Optional
 import queue
 
-from player.main import PlayerManager, Player
+if TYPE_CHECKING:
+    from player.main import PlayerManager, Player
 
 
 @dataclass
@@ -35,7 +36,7 @@ class Score:
 
 
 
-CAMERA_INTERRUPT = object()
+INTERRUPT = object()
 """Sentinel pushed onto the throw queue to signal an abrupt end to the game."""
 
 
@@ -44,6 +45,7 @@ class BaseGame(ABC):
 
     def __init__(self, player_manager: PlayerManager, on_game_end: Optional[Callable] = None):
         self.player_manager = player_manager
+        self.resetting_player_attributes()  # Reset any game-specific attributes in Player objects
         self._throw_queue: queue.Queue = queue.Queue()
         self._on_game_end = on_game_end
 
@@ -76,16 +78,16 @@ class BaseGame(ABC):
     def receive_interrupt(self):
         """Called by the camera system to abruptly end the game.
 
-        Pushes CAMERA_INTERRUPT onto the queue. The game loop detects it
+        Pushes INTERRUPT onto the queue. The game loop detects it
         and calls end().
         """
-        self._throw_queue.put(CAMERA_INTERRUPT)
+        self._throw_queue.put(INTERRUPT)
 
     def _wait_for_throw(self):
-        """Block until a Score or CAMERA_INTERRUPT is received from the camera.
+        """Block until a Score or INTERRUPT is received from the camera.
 
         Returns:
-            A Score object, or CAMERA_INTERRUPT if the camera sent a stop signal.
+            A Score object, or INTERRUPT if the camera sent a stop signal.
         """
         return self._throw_queue.get()
 
@@ -111,5 +113,16 @@ class BaseGame(ABC):
 
     @abstractmethod
     def get_display_state(self):
+        """
+        this returns a dictionary of the current game state, which can be used to display the current game state on a screen or other display device. The exact contents of the dictionary will depend on the specific game being played.
+        """
         pass
+
+    def resetting_player_attributes(self):
+        """
+        Reset any game-specific attributes in the Player objects managed by the PlayerManager.
+        This is useful for starting a new game session with the same players.
+        """
+        for player in self.player_manager.players:
+            player.additional_attributes.clear()
 

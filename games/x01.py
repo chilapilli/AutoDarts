@@ -1,4 +1,4 @@
-from games.base_game import BaseGame, Score, CAMERA_INTERRUPT
+from .base_game import BaseGame, Score, INTERRUPT
 from player import PlayerManager
 from player.main import Player
 import logging
@@ -24,7 +24,8 @@ class X01Game(BaseGame):
         self.current_score = starting_score
         self.is_game_over = False
         self.ends_on_double_to_win = ends_on_double_to_win
-        self.playerManager = playerManager
+        self.player_manager = playerManager
+        self._end_called = False
 
 
     def start(self):
@@ -35,17 +36,22 @@ class X01Game(BaseGame):
         self.is_game_over = False
 
         while not self.is_game_over:   
-            current_player = self.playerManager.get_current_player_object() 
+            current_player = self.player_manager.get_current_player_object() 
             logging.info(f"[X01]: Current player: {current_player.name}, current score: {current_player.additional_attributes['x01_current_score']}")
             self.current_player_round(current_player)
+            
             if not self.is_game_over:
-                self.playerManager.next_player()
+                self.player_manager.next_player()
+
         logging.info(f"[X01]: Game Terminated, winner: {current_player.name}.")
         self.end()  # Call the end method to handle game termination and notify any listeners
 
 
     def end(self):
         """Immediately terminate the game."""
+        if self._end_called:
+            return
+        self._end_called = True
         self.is_game_over = True
         logging.info("[X01]: Game terminated.")
         self._notify_game_end()
@@ -59,7 +65,7 @@ class X01Game(BaseGame):
             existing_score = player.additional_attributes['x01_current_score']
             score = self._wait_for_throw()
 
-            if score is CAMERA_INTERRUPT:
+            if score is INTERRUPT:
                 self.end()
                 return
 
@@ -71,6 +77,9 @@ class X01Game(BaseGame):
                 player.additional_attributes['x01_current_score'] = new_score # updates that score also in the Player's attributes
                 
                 logging.info(f"[X01]: {player.name} scored {score.total}, new score: {new_score}")
+                logging.info(f"[X01]: Game state is updated as {
+                    self.get_display_state()
+                }")
             
 
             elif not self.is_game_over and not self.is_valid_throw(score, existing_score):
@@ -127,13 +136,27 @@ class X01Game(BaseGame):
             self.is_game_over = True
 
     def get_display_state(self):
-        pass
+        """Return a snapshot of the current game state for the display layer."""
+        current_player = self.player_manager.get_current_player_object()
+        next_player = self.player_manager.get_next_player_object()
+
+        return {
+            "game_type": "X01",
+            "game_state": { 
+            "current_player_name": current_player.name,
+            "current_player_score": current_player.additional_attributes["x01_current_score"],
+            "next_player_name": next_player.name,
+            "next_player_score": next_player.additional_attributes["x01_current_score"],
+            "all_player_scores": {player.name: player.additional_attributes["x01_current_score"]
+                                  for player in self.player_manager.players},
+            "leaderboard": self.player_manager.get_ranked_players()
+        }}
 
     def set_player_starting_score(self):
         """
         Sets the additional_attributes['x01_current_score'] for each player to the starting score of the game.
         """
-        for player in self.playerManager.players:
+        for player in self.player_manager.players:
             player.additional_attributes['x01_current_score'] = self.starting_score
 
 

@@ -1,5 +1,6 @@
 import random
-from venv import logger
+import logging
+logger = logging.getLogger(__name__)
 
 class Player:
     """
@@ -21,12 +22,24 @@ class Player:
         return f"{self.name}: won {self.rounds_won} rounds, ranked {self.rank}"
 
     def __str__(self):
-        return f"{self.name}: won {self.rounds_won} rounds, ranked {self.rank}"
+
+        additional_info = "\n            ".join([f"{key}: {value}" for key, value in self.additional_attributes.items()]) if self.additional_attributes else "None" 
+        out_string = f"""
+        ------------------------------------------
+        Name:       {self.name}
+        Rounds Won: {self.rounds_won}
+        Ranking   : {self.rank}
+        Additional Info: 
+            {additional_info}
+        ------------------------------------------
+        """
+
+        return out_string
 
     def increment_rounds_won(self):
         """Increment the player's round win count by one."""
         self.rounds_won += 1
-        logger.info(f"[Player]: {self.name}'s round incremented 1 to {self.rounds_won}.")
+        logger.info(f"[Player]: {self.name}'s round incremented to {self.rounds_won}.")
 
     def decrement_rounds_won(self):
         """Decrement the player's round win count by one.
@@ -61,7 +74,9 @@ class PlayerManager:
 
 
     def __repr__(self):
-        return(f"[PlayerManager]: with ranked players: \n {'\n'.join([str(player) for player in self.get_ranked_players()])}")
+        ranked = self.get_ranked_players()
+        lines = [f"  #{info['rank']} {name}: {info['won']} wins   ---     additional info '{info.get('additional_info', '')}'" for name, info in ranked.items()]
+        return "[PlayerManager]: ranked players:\n" + "\n".join(lines)
 
     def get_random_player_index(self):
         """Return a random valid index into the players list."""
@@ -98,21 +113,31 @@ class PlayerManager:
         Players with equal rounds_won receive the same rank (dense ranking).
 
         Returns:
-            List of Player objects with their rank attribute set.
+            Json of Player objects with their rank attribute set, e.g., 
+
+                {'Alice': {'won': 12, 'rank': 1}, 
+                'Charlie': {'won': 12, 'rank': 1}, 
+                'David': {'won': 7, 'rank': 3}, 
+                'Bob': {'won': 4, 'rank': 4}, 
+                'Eve': {'won': 4, 'rank': 4}}
         """
 
         sorted_players = sorted(self.players, key=lambda player: player.rounds_won, reverse=True)
         current_rank = 1
-        previous_player_score = float('inf')
 
-        for player_index in range(len(sorted_players)):
+        for i, player in enumerate(sorted_players):
+            if i == 0 or player.rounds_won != sorted_players[i - 1].rounds_won:
+                current_rank = i + 1
+            player.rank = current_rank
 
-            if sorted_players[player_index].rounds_won != previous_player_score:
-                sorted_players[player_index].rank = current_rank
-                previous_player_score = sorted_players[player_index].rounds_won
-            else:
-                sorted_players[player_index].rank = current_rank - 1 # on the next time their score would be subtracted from current_rank, so we add 1 here to keep the same rank for equal scores
-            current_rank += 1
+        sorted_players = {
+            player.name: {
+                'won': player.rounds_won, 
+                'rank': player.rank,
+                'additional_info': player.additional_attributes
+            }
+            for player in sorted_players
+        }
 
         return sorted_players
 
@@ -126,10 +151,5 @@ if __name__ == "__main__":
     ]
 
     players = PlayerManager(example_players_json)
-    players.get_current_player_object().increment_rounds_won()
-    print(players)
-
-    players.remove_player("Charlie")
-    print(players)
-
+    print(players.get_ranked_players())
 
