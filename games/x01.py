@@ -142,15 +142,16 @@ class X01Game(BaseGame):
 
         return {
             "game_type": "X01",
-            "game_state": { 
-            "current_player_name": current_player.name,
-            "current_player_score": current_player.additional_attributes["x01_current_score"],
-            "next_player_name": next_player.name,
-            "next_player_score": next_player.additional_attributes["x01_current_score"],
-            "all_player_scores": {player.name: player.additional_attributes["x01_current_score"]
-                                  for player in self.player_manager.players},
-            "leaderboard": self.player_manager.get_ranked_players()
-        }}
+            "game_state": {
+                "current_player_name": current_player.name,
+                "current_player_score": current_player.additional_attributes["x01_current_score"],
+                "next_player_name": next_player.name,
+                "next_player_score": next_player.additional_attributes["x01_current_score"],
+                "all_player_scores": {player.name: player.additional_attributes["x01_current_score"]
+                                    for player in self.player_manager.players},
+                "leaderboard": self.player_manager.get_ranked_players()
+            }
+        }
 
     def set_player_starting_score(self):
         """
