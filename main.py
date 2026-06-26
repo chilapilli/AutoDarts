@@ -178,125 +178,167 @@ def simulate_camera(game, throws, send_interrupt=False):
 # Fifty-One by Five Game Simulation
 # ------------------------------------------------------------------
 
+# if __name__ == "__main__":
+
+#     initiate_logging()
+
+#     example_players = [
+#         {"name": "Alice", "rounds_won": 0},
+#         {"name": "Bob", "rounds_won": 3},
+#         {"name": "Charlie", "rounds_won": 1},
+#         {"name": "David", "rounds_won": 2}
+#     ]
+
+#     session_player_manager = player.PlayerManager(example_players)
+
+
+#     fifty_one_game_session = games.FiftyOneByFive(playerManager=session_player_manager)
+
+#     fake_throws = [
+#         # ---------- Round 1 ----------
+#         # P1: 45 -> +9 (9)
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=5,  is_double=False, is_triple=False),
+
+#         # P2: 60 -> +12 (12)
+#         Score(base_value=20, is_double=True, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # P3: 46 -> not divisible by 5 (0)
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=6,  is_double=False, is_triple=False),
+
+#         # P4: 50 -> +10 (10)
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=10, is_double=False, is_triple=False),
+
+#         # ---------- Round 2 ----------
+#         # P1: 60 -> +12 (21)
+#         Score(base_value=20, is_double=True, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # P2: 60 -> +12 (24)
+#         Score(base_value=20, is_double=True, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # P3: 45 -> +9 (9)
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=5,  is_double=False, is_triple=False),
+
+#         # P4: 47 -> not divisible by 5 (10)
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=7,  is_double=False, is_triple=False),
+
+#         # ---------- Round 3 ----------
+#         # P1: 60 -> +12 (33)
+#         Score(base_value=20, is_double=True, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # P2: 60 -> +12 (36)
+#         Score(base_value=20, is_double=True, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # P3: 60 -> +12 (21)
+#         Score(base_value=20, is_double=True, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # P4: 60 -> +12 (22)
+#         Score(base_value=20, is_double=True, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # ---------- Round 4 ----------
+#         # P1: 60 -> +12 (45)
+#         Score(base_value=20, is_double=True, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # P2: 60 -> +12 (48)
+#         Score(base_value=20, is_double=True, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # P3: 55 -> +11 (32)
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=15, is_double=False, is_triple=False),
+
+#         # P4: 46 -> not divisible by 5 (22)
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=6,  is_double=False, is_triple=False),
+
+#         # ---------- Round 5 ----------
+#         # P1: 40 -> +8 => would reach 53 -> BUST (stays 45)
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=20, is_double=False, is_triple=False),
+#         Score(base_value=0,  is_double=False, is_triple=False),
+
+#         # P2: 15 -> +3 (51) WIN
+#         Score(base_value=5,  is_double=False, is_triple=False),
+#         Score(base_value=5,  is_double=False, is_triple=False),
+#         Score(base_value=5,  is_double=False, is_triple=False),
+#     ]
+
+#     camera_thread = threading.Thread(
+#         target=simulate_camera,
+#         args=(fifty_one_game_session, fake_throws),
+#         kwargs={"send_interrupt": False},
+#     )
+#     camera_thread.start()
+
+#     fifty_one_game_session.start()
+#     camera_thread.join()
+
+#     print(session_player_manager)
+
+#     end_logging()
+
+
+# ------------------------------------------------------------------
+# Around the Clock Game Simulation
+# ------------------------------------------------------------------
+
 if __name__ == "__main__":
 
     initiate_logging()
 
     example_players = [
         {"name": "Alice", "rounds_won": 0},
-        {"name": "Bob", "rounds_won": 3},
-        {"name": "Charlie", "rounds_won": 1},
-        {"name": "David", "rounds_won": 2}
+        {"name": "Bob", "rounds_won": 0},
+        {"name": "Charlie", "rounds_won": 0}
     ]
 
     session_player_manager = player.PlayerManager(example_players)
-    fifty_one_game_session = games.FiftyOneByFive(playerManager=session_player_manager)
+    around_the_clock_game_session = games.AroundTheClockGame(player_manager=session_player_manager)
 
     fake_throws = [
-        # ---------- Round 1 ----------
-        # P1: 45 -> +9 (9)
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=5,  is_double=False, is_triple=False),
-
-        # P2: 60 -> +12 (12)
-        Score(base_value=20, is_double=True, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # P3: 46 -> not divisible by 5 (0)
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=6,  is_double=False, is_triple=False),
-
-        # P4: 50 -> +10 (10)
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=10, is_double=False, is_triple=False),
-
-        # ---------- Round 2 ----------
-        # P1: 60 -> +12 (21)
-        Score(base_value=20, is_double=True, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # P2: 60 -> +12 (24)
-        Score(base_value=20, is_double=True, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # P3: 45 -> +9 (9)
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=5,  is_double=False, is_triple=False),
-
-        # P4: 47 -> not divisible by 5 (10)
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=7,  is_double=False, is_triple=False),
-
-        # ---------- Round 3 ----------
-        # P1: 60 -> +12 (33)
-        Score(base_value=20, is_double=True, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # P2: 60 -> +12 (36)
-        Score(base_value=20, is_double=True, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # P3: 60 -> +12 (21)
-        Score(base_value=20, is_double=True, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # P4: 60 -> +12 (22)
-        Score(base_value=20, is_double=True, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # ---------- Round 4 ----------
-        # P1: 60 -> +12 (45)
-        Score(base_value=20, is_double=True, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # P2: 60 -> +12 (48)
-        Score(base_value=20, is_double=True, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # P3: 55 -> +11 (32)
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=15, is_double=False, is_triple=False),
-
-        # P4: 46 -> not divisible by 5 (22)
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=6,  is_double=False, is_triple=False),
-
-        # ---------- Round 5 ----------
-        # P1: 40 -> +8 => would reach 53 -> BUST (stays 45)
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=20, is_double=False, is_triple=False),
-        Score(base_value=0,  is_double=False, is_triple=False),
-
-        # P2: 15 -> +3 (51) WIN
-        Score(base_value=5,  is_double=False, is_triple=False),
-        Score(base_value=5,  is_double=False, is_triple=False),
-        Score(base_value=5,  is_double=False, is_triple=False),
+        Score(base_value=1), Score(base_value=2), Score(base_value=3),
+        Score(base_value=4), Score(base_value=5), Score(base_value=6),
+        Score(base_value=7), Score(base_value=8), Score(base_value=9),
+        Score(base_value=10), Score(base_value=11), Score(base_value=12),
+        # Add more throws as needed for testing
     ]
 
     camera_thread = threading.Thread(
         target=simulate_camera,
-        args=(fifty_one_game_session, fake_throws),
+        args=(around_the_clock_game_session, fake_throws),
         kwargs={"send_interrupt": False},
     )
     camera_thread.start()
 
-    fifty_one_game_session.start()
+    around_the_clock_game_session.start()
     camera_thread.join()
 
     print(session_player_manager)

@@ -53,8 +53,7 @@ class Player:
         else:
             logger.error(f"[Player]: Attempted to decrement rounds won for {self.name} below zero.")  
             raise ValueError("Rounds won cannot be negative.")
-
-    
+   
 
 class PlayerManager:
     """Manages a collection of Players for a session across multiple rounds.
@@ -140,6 +139,7 @@ class PlayerManager:
         }
 
         return sorted_players
+
 
 if __name__ == "__main__":
     example_players_json = [

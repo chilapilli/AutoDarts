@@ -113,7 +113,7 @@ class X01Game(BaseGame):
         if score.total < current_score: 
             return True
         
-        if ends_on_double_to_win and score.total == current_score and score.is_double: # ends the round
+        if ends_on_double_to_win and score.total == current_score and (score.is_double or score.base_value == 50): # ends the round
             return True
     
         if not ends_on_double_to_win and score.total == current_score: # ends the round
