@@ -68,6 +68,7 @@ class KillerGame(BaseGame):
 
 
     def current_player_round(self, player: Player):
+        logging.info(f"[Killer]: New round, {player.name}'s turn.")
         for _ in range(3):
             if self.is_game_over:
                 return

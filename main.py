@@ -22,7 +22,7 @@ def simulate_camera(game, throws, send_interrupt=False):
         send_interrupt: If True, sends an INTERRUPT after all throws to force-end the game.
     """
     for throw in throws:
-        time.sleep(0.25)
+        time.sleep(0.1)
         logging.info(f"[camera] detected throw: {throw}")
         game.receive_throw(throw)
     if send_interrupt:

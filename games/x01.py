@@ -37,7 +37,7 @@ class X01Game(BaseGame):
 
         while not self.is_game_over:   
             current_player = self.player_manager.get_current_player_object() 
-            logging.info(f"[X01]: Current player: {current_player.name}, current score: {current_player.additional_attributes['x01_current_score']}")
+            logging.info(f"[X01]: New round, {current_player.name}'s turn. Current score: {current_player.additional_attributes['x01_current_score']}")
             self.current_player_round(current_player)
             
             if not self.is_game_over:
