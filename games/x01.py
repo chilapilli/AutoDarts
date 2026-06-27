@@ -43,7 +43,7 @@ class X01Game(BaseGame):
             if not self.is_game_over:
                 self.player_manager.next_player()
 
-        logging.info(f"[X01]: Game Terminated, winner: {current_player.name}.")
+        logging.info(f"[X01]: Game Terminated.")
         self.end()  # Call the end method to handle game termination and notify any listeners
 
 
@@ -69,7 +69,7 @@ class X01Game(BaseGame):
                 self.end()
                 return
 
-            self.check_win(score, existing_score) # if the game is won is_game_over is set to True
+            self.check_win(score, existing_score, self.ends_on_double_to_win) # if the game is won is_game_over is set to True
             
             if not self.is_game_over and self.is_valid_throw(score, existing_score):
 
@@ -77,9 +77,9 @@ class X01Game(BaseGame):
                 player.additional_attributes['x01_current_score'] = new_score # updates that score also in the Player's attributes
                 
                 logging.info(f"[X01]: {player.name} scored {score.total}, new score: {new_score}")
-                logging.info(f"[X01]: Game state is updated as {
-                    self.get_display_state()
-                }")
+                # logging.info(f"[X01]: Game state is updated as {
+                    # self.get_display_state()
+                # }")
             
 
             elif not self.is_game_over and not self.is_valid_throw(score, existing_score):
