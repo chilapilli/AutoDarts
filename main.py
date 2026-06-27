@@ -23,7 +23,7 @@ def simulate_camera(game, throws, send_interrupt=False):
         send_interrupt: If True, sends an INTERRUPT after all throws to force-end the game.
     """
     for throw in throws:
-        time.sleep(random.uniform(0.2, 0.8))  # Simulate time taken for a throw to be detected
+        time.sleep(random.uniform(0.001, 0.05))  # Simulate time taken for a throw to be detected
         logging.info(f"[camera] detected throw: {throw}")
         game.receive_throw(throw)
     if send_interrupt:
@@ -318,8 +318,64 @@ def simulate_camera(game, throws, send_interrupt=False):
 
 
 # ------------------------------------------------------------------
-# Around the Clock Game Simulation
+# Around the Clock Game Simulation (Time Based)
 # ------------------------------------------------------------------
+
+# if __name__ == "__main__":
+
+#     initiate_logging()
+
+#     example_players = [
+#         {"name": "Ashley", "rounds_won": 1},
+#         {"name": "Matthew", "rounds_won": 0},
+#     ]
+
+#     session_player_manager = player.PlayerManager(example_players)
+#     around_the_clock_game_session = games.AroundTheClockGame(player_manager=session_player_manager,
+#                                                              end_on_any_part_of_bull_to_win=False,
+#                                                              end_on_outer_and_then_inner_bull_to_win=False,
+#                                                              is_solo_round=True,
+#                                                              only_count_doubles_as_hit=True,
+#                                                              only_count_triples_as_hit=False)
+
+#     fake_throws = [
+#         Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
+#         Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True), 
+#         Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
+#         Score(base_value=10, is_double=True), Score(base_value=11, is_double=True), Score(base_value=12, is_double=True),
+#         Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
+#         Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
+#         Score(base_value=19, is_double=True), Score(base_value=20, is_double=True),  # hit double 20 to win
+        
+#         Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
+#         Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True), 
+#         Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
+#         Score(base_value=10, is_double=True), Score(base_value=11, is_double=True), Score(base_value=12, is_double=True),
+#         Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
+#         Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
+#         Score(base_value=19, is_double=True), Score(base_value=19, is_double=True), Score(base_value=20, is_double=False),
+#         Score(base_value=20, is_double=True),  # hit double 20 to win
+        
+#     ]
+
+#     camera_thread = threading.Thread(
+#         target=simulate_camera,
+#         args=(around_the_clock_game_session, fake_throws),
+#         kwargs={"send_interrupt": False},
+#     )
+#     camera_thread.start()
+
+#     around_the_clock_game_session.start()
+#     camera_thread.join()
+
+#     print(session_player_manager)
+
+#     end_logging()
+
+
+# -------------------------------------------------------------------
+# Around the Clock Game Simulation (Turn Based)
+# -------------------------------------------------------------------
 
 if __name__ == "__main__":
 
@@ -333,29 +389,52 @@ if __name__ == "__main__":
     session_player_manager = player.PlayerManager(example_players)
     around_the_clock_game_session = games.AroundTheClockGame(player_manager=session_player_manager,
                                                              end_on_any_part_of_bull_to_win=False,
-                                                             end_on_outer_and_then_inner_bull_to_win=False,
-                                                             is_solo_round=True,
-                                                             only_count_doubles_as_hit=True,
+                                                             end_on_outer_and_then_inner_bull_to_win=True,
+                                                             is_solo_round=False,
+                                                             only_count_doubles_as_hit=False,
                                                              only_count_triples_as_hit=False)
 
     fake_throws = [
-        Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
-        Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True), 
-        Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
-        Score(base_value=10, is_double=True), Score(base_value=11, is_double=True), Score(base_value=12, is_double=True),
-        Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
-        Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
-        Score(base_value=19, is_double=True), Score(base_value=20, is_double=True),  # hit double 20 to win
         
+        # p1 
         Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
+        # p2
+        Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
+
+        # p1
         Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True), 
+        # p2
+        Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True),          
+
+        #p1
         Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
+        #p2
+        Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
+
+        #p1
         Score(base_value=10, is_double=True), Score(base_value=11, is_double=True), Score(base_value=12, is_double=True),
+        #p2
+        Score(base_value=10, is_double=True), Score(base_value=11, is_double    =True), Score(base_value=12, is_double=True),
+
+        #p1
         Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
+        #p2
+        Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
+
+        #p1
         Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
-        Score(base_value=19, is_double=True), Score(base_value=19, is_double=True), Score(base_value=20, is_double=False),
-        Score(base_value=20, is_double=True),  # hit double 20 to win
-        
+        #p2
+        Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
+
+        #p1
+        Score(base_value=19, is_double=True), Score(base_value=20, is_double=False), Score(base_value=15, is_double=True),  # hit double 20 to win
+        #p2
+        Score(base_value=19, is_double=True), Score(base_value=20, is_double=True), Score(base_value=25, is_double=False),  # hit double 20 to win
+
+        #p1
+        Score(base_value=25, is_double=False), Score(base_value=20, is_double=False), Score(base_value=20, is_double=True),  # hit double 20 to win
+        #p2
+        Score(base_value=25, is_double=False), Score(base_value=50, is_double=False)  # hit double 20 to win
     ]
 
     camera_thread = threading.Thread(
