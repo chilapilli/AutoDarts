@@ -335,25 +335,26 @@ if __name__ == "__main__":
                                                              end_on_any_part_of_bull_to_win=False,
                                                              end_on_outer_and_then_inner_bull_to_win=False,
                                                              is_solo_round=True,
-                                                             only_count_doubles_as_hit=False,
+                                                             only_count_doubles_as_hit=True,
                                                              only_count_triples_as_hit=False)
 
     fake_throws = [
-        Score(base_value=1), Score(base_value=2), Score(base_value=3), 
-        Score(base_value=4), Score(base_value=5), Score(base_value=6), 
-        Score(base_value=7), Score(base_value=8), Score(base_value=9),
-        Score(base_value=10), Score(base_value=11), Score(base_value=12),
-        Score(base_value=13), Score(base_value=14), Score(base_value=15),
-        Score(base_value=16), Score(base_value=17), Score(base_value=18),
-        Score(base_value=19), Score(base_value=20),
+        Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
+        Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True), 
+        Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
+        Score(base_value=10, is_double=True), Score(base_value=11, is_double=True), Score(base_value=12, is_double=True),
+        Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
+        Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
+        Score(base_value=19, is_double=True), Score(base_value=20, is_double=True),  # hit double 20 to win
         
-        Score(base_value=1), Score(base_value=2), Score(base_value=3), 
-        Score(base_value=4), Score(base_value=5), Score(base_value=6), 
-        Score(base_value=7), Score(base_value=8), Score(base_value=9),
-        Score(base_value=10), Score(base_value=11), Score(base_value=12),
-        Score(base_value=13), Score(base_value=14), Score(base_value=15),
-        Score(base_value=16), Score(base_value=17), Score(base_value=18),
-        Score(base_value=19), Score(base_value=19), Score(base_value=20),
+        Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
+        Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True), 
+        Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
+        Score(base_value=10, is_double=True), Score(base_value=11, is_double=True), Score(base_value=12, is_double=True),
+        Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
+        Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
+        Score(base_value=19, is_double=True), Score(base_value=19, is_double=True), Score(base_value=20, is_double=False),
+        Score(base_value=20, is_double=True),  # hit double 20 to win
         
     ]
 

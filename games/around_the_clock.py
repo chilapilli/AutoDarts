@@ -152,7 +152,7 @@ class AroundTheClockGame(BaseGame):
                 self.end()
                 return
 
-            logging.info(f"[Around the Clock]: {player.name} threw {score.total}, target is {player.additional_attributes["around_the_clock_next_number"]}.")
+            logging.info(f"[Around the Clock]: {player.name} threw {score.base_value} {f'DOUBLE' if score.is_double else ''} {f'TRIPLE' if score.is_triple else ''}, target is {player.additional_attributes["around_the_clock_next_number"]} {f"DOUBLE" if self.only_count_doubles_as_hit else ''} {f"TRIPLE" if self.only_count_triples_as_hit else ''}.")
 
             if self._check_has_hit_next_target_number(player = player,
                                                       score = score, 
