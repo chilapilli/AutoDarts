@@ -1,3 +1,4 @@
+import random
 import games
 import player
 import threading
@@ -22,7 +23,7 @@ def simulate_camera(game, throws, send_interrupt=False):
         send_interrupt: If True, sends an INTERRUPT after all throws to force-end the game.
     """
     for throw in throws:
-        time.sleep(0.5)
+        time.sleep(random.uniform(0.2, 0.8))  # Simulate time taken for a throw to be detected
         logging.info(f"[camera] detected throw: {throw}")
         game.receive_throw(throw)
     if send_interrupt:
@@ -34,59 +35,59 @@ def simulate_camera(game, throws, send_interrupt=False):
 # X01 Game Simulation Example
 # ------------------------------------------------------------------
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    initiate_logging()
+#     initiate_logging()
 
-    example_players = [
-        {"name": "Ashley", "rounds_won": 2},
-        {"name": "Matthew", "rounds_won": 1},
-    ]
+#     example_players = [
+#         {"name": "Ashley", "rounds_won": 2},
+#         {"name": "Matthew", "rounds_won": 1},
+#     ]
 
-    session_player_manager = player.PlayerManager(example_players)
+#     session_player_manager = player.PlayerManager(example_players)
 
-    starting_score = 201
-    x01_game_session = games.X01Game(starting_score=starting_score, 
-                                     playerManager=session_player_manager, 
-                                     ends_on_double_to_win=False)
+#     starting_score = 201
+#     x01_game_session = games.X01Game(starting_score=starting_score, 
+#                                      playerManager=session_player_manager, 
+#                                      ends_on_double_to_win=False)
 
-    fake_throws = [
-        Score(base_value=20, is_double=False, is_triple=True),
-        Score(base_value=8, is_double=True, is_triple=False),
-        Score(base_value=10, is_double=False, is_triple=True), # 106 
+#     fake_throws = [
+#         Score(base_value=20, is_double=False, is_triple=True),
+#         Score(base_value=8, is_double=True, is_triple=False),
+#         Score(base_value=10, is_double=False, is_triple=True), # 106 
 
-        Score(base_value=5, is_double=False, is_triple=False),
-        Score(base_value=25, is_double=True, is_triple=False),  
-        Score(base_value=20, is_double=False, is_triple=False), # 75  
+#         Score(base_value=5, is_double=False, is_triple=False),
+#         Score(base_value=25, is_double=True, is_triple=False),  
+#         Score(base_value=20, is_double=False, is_triple=False), # 75  
 
-        Score(base_value=12, is_double=False, is_triple=True),
-        Score(base_value=50, is_double=False, is_triple=False),
-        Score(base_value=9, is_double=False, is_triple=False), # wins here
+#         Score(base_value=12, is_double=False, is_triple=True),
+#         Score(base_value=50, is_double=False, is_triple=False),
+#         Score(base_value=9, is_double=False, is_triple=False), # wins here
 
-        # Score(base_value=0, is_double=False, is_triple=True),
-        # Score(base_value=0, is_double=False, is_triple=True),
-        # Score(base_value=0, is_double=False, is_triple=True),
+#         # Score(base_value=0, is_double=False, is_triple=True),
+#         # Score(base_value=0, is_double=False, is_triple=True),
+#         # Score(base_value=0, is_double=False, is_triple=True),
 
-        # Score(base_value=9, is_double=False, is_triple=True),
-        # Score(base_value=10, is_double=False, is_triple=True),
-        # Score(base_value=10, is_double=False, is_triple=True),
+#         # Score(base_value=9, is_double=False, is_triple=True),
+#         # Score(base_value=10, is_double=False, is_triple=True),
+#         # Score(base_value=10, is_double=False, is_triple=True),
 
-    ]
+#     ]
 
-    # camera runs in a background thread, game loop blocks on _wait_for_throw()
-    # send_interrupt=True sends INTERRUPT via receive_interrupt() after all throws
-    camera_thread = threading.Thread(target=simulate_camera, 
-                                     args=(x01_game_session, fake_throws), 
-                                     kwargs={"send_interrupt": False})
-    camera_thread.start()
+#     # camera runs in a background thread, game loop blocks on _wait_for_throw()
+#     # send_interrupt=True sends INTERRUPT via receive_interrupt() after all throws
+#     camera_thread = threading.Thread(target=simulate_camera, 
+#                                      args=(x01_game_session, fake_throws), 
+#                                      kwargs={"send_interrupt": False})
+#     camera_thread.start()
 
-    x01_game_session.start()
+#     x01_game_session.start()
 
-    camera_thread.join() # this waits for the whole camera thread to finish before ending
+#     camera_thread.join() # this waits for the whole camera thread to finish before ending
 
-    print(session_player_manager)
+#     print(session_player_manager)
 
-    end_logging()
+#     end_logging()
 
 
 # ------------------------------------------------------------------
@@ -320,37 +321,52 @@ if __name__ == "__main__":
 # Around the Clock Game Simulation
 # ------------------------------------------------------------------
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-#     initiate_logging()
+    initiate_logging()
 
-#     example_players = [
-#         {"name": "Alice", "rounds_won": 0},
-#         {"name": "Bob", "rounds_won": 0},
-#         {"name": "Charlie", "rounds_won": 0}
-#     ]
+    example_players = [
+        {"name": "Ashley", "rounds_won": 1},
+        {"name": "Matthew", "rounds_won": 0},
+    ]
 
-#     session_player_manager = player.PlayerManager(example_players)
-#     around_the_clock_game_session = games.AroundTheClockGame(player_manager=session_player_manager)
+    session_player_manager = player.PlayerManager(example_players)
+    around_the_clock_game_session = games.AroundTheClockGame(player_manager=session_player_manager,
+                                                             end_on_any_part_of_bull_to_win=False,
+                                                             end_on_outer_and_then_inner_bull_to_win=False,
+                                                             is_solo_round=True,
+                                                             only_count_doubles_as_hit=False,
+                                                             only_count_triples_as_hit=False)
 
-#     fake_throws = [
-#         Score(base_value=1), Score(base_value=2), Score(base_value=3),
-#         Score(base_value=4), Score(base_value=5), Score(base_value=6),
-#         Score(base_value=7), Score(base_value=8), Score(base_value=9),
-#         Score(base_value=10), Score(base_value=11), Score(base_value=12),
-#         # Add more throws as needed for testing
-#     ]
+    fake_throws = [
+        Score(base_value=1), Score(base_value=2), Score(base_value=3), 
+        Score(base_value=4), Score(base_value=5), Score(base_value=6), 
+        Score(base_value=7), Score(base_value=8), Score(base_value=9),
+        Score(base_value=10), Score(base_value=11), Score(base_value=12),
+        Score(base_value=13), Score(base_value=14), Score(base_value=15),
+        Score(base_value=16), Score(base_value=17), Score(base_value=18),
+        Score(base_value=19), Score(base_value=20),
+        
+        Score(base_value=1), Score(base_value=2), Score(base_value=3), 
+        Score(base_value=4), Score(base_value=5), Score(base_value=6), 
+        Score(base_value=7), Score(base_value=8), Score(base_value=9),
+        Score(base_value=10), Score(base_value=11), Score(base_value=12),
+        Score(base_value=13), Score(base_value=14), Score(base_value=15),
+        Score(base_value=16), Score(base_value=17), Score(base_value=18),
+        Score(base_value=19), Score(base_value=19), Score(base_value=20),
+        
+    ]
 
-#     camera_thread = threading.Thread(
-#         target=simulate_camera,
-#         args=(around_the_clock_game_session, fake_throws),
-#         kwargs={"send_interrupt": False},
-#     )
-#     camera_thread.start()
+    camera_thread = threading.Thread(
+        target=simulate_camera,
+        args=(around_the_clock_game_session, fake_throws),
+        kwargs={"send_interrupt": False},
+    )
+    camera_thread.start()
 
-#     around_the_clock_game_session.start()
-#     camera_thread.join()
+    around_the_clock_game_session.start()
+    camera_thread.join()
 
-#     print(session_player_manager)
+    print(session_player_manager)
 
-#     end_logging()
+    end_logging()
