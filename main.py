@@ -326,8 +326,8 @@ def simulate_camera(game, throws, send_interrupt=False):
 #     initiate_logging()
 
 #     example_players = [
-#         {"name": "Ashley", "rounds_won": 1},
-#         {"name": "Matthew", "rounds_won": 0},
+#         {"name": "Ashley", "rounds_won": 3},
+#         {"name": "Matthew", "rounds_won": 1},
 #     ]
 
 #     session_player_manager = player.PlayerManager(example_players)
@@ -392,7 +392,8 @@ if __name__ == "__main__":
                                                              end_on_outer_and_then_inner_bull_to_win=True,
                                                              is_solo_round=False,
                                                              only_count_doubles_as_hit=False,
-                                                             only_count_triples_as_hit=False)
+                                                             only_count_triples_as_hit=False,
+                                                             custom_end_of_sequence_number=19)
 
     fake_throws = [
         

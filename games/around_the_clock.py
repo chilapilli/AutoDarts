@@ -12,7 +12,8 @@ class AroundTheClockGame(BaseGame):
                  end_on_outer_and_then_inner_bull_to_win: bool,
                  is_solo_round: bool, # if set to False, the game will be played in a normal turn-based manner. If set to True, the game will be played in a solo run manner, where each player takes turns to complete the sequence as fast as possible.
                  only_count_doubles_as_hit: bool,
-                 only_count_triples_as_hit: bool
+                 only_count_triples_as_hit: bool,
+                 custom_end_of_sequence_number: int = None
                  ):
         
         super().__init__(player_manager)
@@ -22,6 +23,7 @@ class AroundTheClockGame(BaseGame):
         self._end_called = False
         self._is_solo_round = is_solo_round
         self.player_manager = player_manager
+        self.custom_end_of_sequence_number = custom_end_of_sequence_number
 
         # Validate the game settings to ensure they are not contradictory
         if end_on_any_part_of_bull_to_win and end_on_outer_and_then_inner_bull_to_win:
@@ -44,10 +46,13 @@ class AroundTheClockGame(BaseGame):
         self._initialise_player_current_number()
         
         logging.info(f"""[Around the Clock]: Game settings:
+                     
+                     - Game Type: {'Solo' if self._is_solo_round else 'Turn-based'}
                      - End on any part of bull to win: {self.end_on_any_part_of_bull_to_win}
                      - End on outer and then inner bull to win: {self.end_on_outer_and_then_inner_bull_to_win}
                      - Only count doubles as hit: {self.only_count_doubles_as_hit}
                      - Only count triples as hit: {self.only_count_triples_as_hit}
+                     - Custom end of sequence number: {self.custom_end_of_sequence_number if self.custom_end_of_sequence_number is not None else 'None'}
                      """)
         
         if self._is_solo_round:
@@ -93,7 +98,7 @@ class AroundTheClockGame(BaseGame):
                 
                 player_current_number = player.additional_attributes["around_the_clock_current_number"]
                 
-                if player_current_number in [20, 25, 50]: # only check for win if the player has reached a winning number
+                if player_current_number in [self.custom_end_of_sequence_number, 20, 25, 50]: # only check for win if the player has reached a winning number
                     self.is_game_over = self.check_finish_sequence(player=player,
                                                 current_number=player_current_number, 
                                                 end_on_any_part_of_bull_to_win=self.end_on_any_part_of_bull_to_win,
@@ -117,6 +122,10 @@ class AroundTheClockGame(BaseGame):
         """
         Checks if the player has finished the sequence based on the game settings.
         """
+
+        if self.custom_end_of_sequence_number is not None and current_number == self.custom_end_of_sequence_number:
+            return True 
+
         if (not end_on_any_part_of_bull_to_win) and (not end_on_outer_and_then_inner_bull_to_win) and (current_number == 20):
             logging.info(f"[Around the Clock]: Player {player.name} has finished the sequence on number {current_number}.")
             return True
