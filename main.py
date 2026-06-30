@@ -462,22 +462,37 @@ if __name__ == "__main__":
     initiate_logging()
 
     example_players = [
-        {"name": "Alice", "rounds_won": 0},
-        {"name": "Bob", "rounds_won": 0},
-        {"name": "Charlie", "rounds_won": 0}
+        {"name": "Matthew", "rounds_won": 0},
+        {"name": "Ashley", "rounds_won": 0}
     ]
 
     session_player_manager = player.PlayerManager(example_players)
-    high_low_game_session = games.HighLowGame(player_manager=session_player_manager)
+    high_low_game_session = games.HighLowGame(player_manager=session_player_manager,
+                                              high_only=False,  # alternates between high and low rounds
+                                              total_lives=3)    # each player has 3 lives
 
+    # fake data for high-low game simulation; replace with actual throw data as needed
     fake_throws = [
-        Score(base_value=20, is_double=False, is_triple=False),  # Alice
-        # Score(base_value=5, is_double=False, is_triple=False),   # Bob
-        # Score(base_value=15, is_double=False, is_triple=False),  # Charlie
-        # Score(base_value=10, is_double=False, is_triple=False),  # Alice
-        # Score(base_value=25, is_double=False, is_triple=False),  # Bob
-        # Score(base_value=30, is_double=False, is_triple=False),  # Charlie
+      Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True),
+      Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True),
+
+      Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True),
+      Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True),
+
+      Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True),
+      Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True),
+
+      Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True),
+      Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True),
+
+      Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True),
+      Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True),
+
+    #   Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True), Score(base_value=20, is_double=False, is_triple=True),
+    #   Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True), Score(base_value=5, is_double=False, is_triple=True),
     ]
+
+    
 
     camera_thread = threading.Thread(
         target=simulate_camera,
