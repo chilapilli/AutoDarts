@@ -377,75 +377,116 @@ def simulate_camera(game, throws, send_interrupt=False):
 # Around the Clock Game Simulation (Turn Based)
 # -------------------------------------------------------------------
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
+#     initiate_logging()
+
+#     example_players = [
+#         {"name": "Ashley", "rounds_won": 1},
+#         {"name": "Matthew", "rounds_won": 0},
+#     ]
+
+#     session_player_manager = player.PlayerManager(example_players)
+#     around_the_clock_game_session = games.AroundTheClockGame(player_manager=session_player_manager,
+#                                                              end_on_any_part_of_bull_to_win=False,
+#                                                              end_on_outer_and_then_inner_bull_to_win=True,
+#                                                              is_solo_round=False,
+#                                                              only_count_doubles_as_hit=False,
+#                                                              only_count_triples_as_hit=False,
+#                                                              custom_end_of_sequence_number=19)
+
+#     fake_throws = [
+        
+#         # p1 
+#         Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
+#         # p2
+#         Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
+
+#         # p1
+#         Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True), 
+#         # p2
+#         Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True),          
+
+#         #p1
+#         Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
+#         #p2
+#         Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
+
+#         #p1
+#         Score(base_value=10, is_double=True), Score(base_value=11, is_double=True), Score(base_value=12, is_double=True),
+#         #p2
+#         Score(base_value=10, is_double=True), Score(base_value=11, is_double    =True), Score(base_value=12, is_double=True),
+
+#         #p1
+#         Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
+#         #p2
+#         Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
+
+#         #p1
+#         Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
+#         #p2
+#         Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
+
+#         #p1
+#         Score(base_value=19, is_double=True), Score(base_value=20, is_double=False), Score(base_value=15, is_double=True),  # hit double 20 to win
+#         #p2
+#         Score(base_value=19, is_double=True), Score(base_value=20, is_double=True), Score(base_value=25, is_double=False),  # hit double 20 to win
+
+#         #p1
+#         Score(base_value=25, is_double=False), Score(base_value=20, is_double=False), Score(base_value=20, is_double=True),  # hit double 20 to win
+#         #p2
+#         Score(base_value=25, is_double=False), Score(base_value=50, is_double=False)  # hit double 20 to win
+#     ]
+
+#     camera_thread = threading.Thread(
+#         target=simulate_camera,
+#         args=(around_the_clock_game_session, fake_throws),
+#         kwargs={"send_interrupt": False},
+#     )
+#     camera_thread.start()
+
+#     around_the_clock_game_session.start()
+#     camera_thread.join()
+
+#     print(session_player_manager)
+
+#     end_logging()
+
+
+# --------------------------------------------------------------------
+# High-Low Game Simulation
+# --------------------------------------------------------------------
+
+if __name__ == "__main__":
+    
     initiate_logging()
 
     example_players = [
-        {"name": "Ashley", "rounds_won": 1},
-        {"name": "Matthew", "rounds_won": 0},
+        {"name": "Alice", "rounds_won": 0},
+        {"name": "Bob", "rounds_won": 0},
+        {"name": "Charlie", "rounds_won": 0}
     ]
 
     session_player_manager = player.PlayerManager(example_players)
-    around_the_clock_game_session = games.AroundTheClockGame(player_manager=session_player_manager,
-                                                             end_on_any_part_of_bull_to_win=False,
-                                                             end_on_outer_and_then_inner_bull_to_win=True,
-                                                             is_solo_round=False,
-                                                             only_count_doubles_as_hit=False,
-                                                             only_count_triples_as_hit=False,
-                                                             custom_end_of_sequence_number=19)
+    high_low_game_session = games.HighLowGame(player_manager=session_player_manager)
 
     fake_throws = [
-        
-        # p1 
-        Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
-        # p2
-        Score(base_value=1, is_double=True), Score(base_value=2, is_double=True), Score(base_value=3, is_double=True), 
-
-        # p1
-        Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True), 
-        # p2
-        Score(base_value=4, is_double=True), Score(base_value=5, is_double=True), Score(base_value=6, is_double=True),          
-
-        #p1
-        Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
-        #p2
-        Score(base_value=7, is_double=True), Score(base_value=8, is_double=True), Score(base_value=9, is_double=True),
-
-        #p1
-        Score(base_value=10, is_double=True), Score(base_value=11, is_double=True), Score(base_value=12, is_double=True),
-        #p2
-        Score(base_value=10, is_double=True), Score(base_value=11, is_double    =True), Score(base_value=12, is_double=True),
-
-        #p1
-        Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
-        #p2
-        Score(base_value=13, is_double=True), Score(base_value=14, is_double=True), Score(base_value=15, is_double=True),
-
-        #p1
-        Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
-        #p2
-        Score(base_value=16, is_double=True), Score(base_value=17, is_double=True), Score(base_value=18, is_double=True),
-
-        #p1
-        Score(base_value=19, is_double=True), Score(base_value=20, is_double=False), Score(base_value=15, is_double=True),  # hit double 20 to win
-        #p2
-        Score(base_value=19, is_double=True), Score(base_value=20, is_double=True), Score(base_value=25, is_double=False),  # hit double 20 to win
-
-        #p1
-        Score(base_value=25, is_double=False), Score(base_value=20, is_double=False), Score(base_value=20, is_double=True),  # hit double 20 to win
-        #p2
-        Score(base_value=25, is_double=False), Score(base_value=50, is_double=False)  # hit double 20 to win
+        Score(base_value=20, is_double=False, is_triple=False),  # Alice
+        # Score(base_value=5, is_double=False, is_triple=False),   # Bob
+        # Score(base_value=15, is_double=False, is_triple=False),  # Charlie
+        # Score(base_value=10, is_double=False, is_triple=False),  # Alice
+        # Score(base_value=25, is_double=False, is_triple=False),  # Bob
+        # Score(base_value=30, is_double=False, is_triple=False),  # Charlie
     ]
 
     camera_thread = threading.Thread(
         target=simulate_camera,
-        args=(around_the_clock_game_session, fake_throws),
+        args=(high_low_game_session, fake_throws),
         kwargs={"send_interrupt": False},
     )
     camera_thread.start()
 
-    around_the_clock_game_session.start()
+    high_low_game_session.start()
     camera_thread.join()
 
     print(session_player_manager)
